@@ -15,7 +15,7 @@ export function leadingTrailingSlash(base?: string) {
 }
 
 const pattern = {
-  htmlAttr: `(href|src(set)?|poster|component-url|renderer-url)=["']?([^"']*,)?`,
+  htmlAttr: `(href|(data-)?src(set)?|poster|component-url|renderer-url)=["']?([^"']*,)?`,
   styleAttr: `style=("[^"]*|'[^']*|[^\\s]*)`,
   styleUrl: `url\\(\\s*?["']?`,
 };
