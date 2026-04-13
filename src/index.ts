@@ -42,11 +42,12 @@ export function replaceHTML({
   html: string;
 }) {
   const { htmlAttr, styleAttr, styleUrl } = pattern;
+  const arlSkipPattern = `(?!(\/|[^>]*arl:skip))(?=[^>]*>)`;
   const htmlPattern =
-    `<[^>]+\\s(` + htmlAttr + `|` + styleAttr + styleUrl + `)`;
+    `<${arlSkipPattern}[^>]+\\s(${htmlAttr}|${styleAttr}${styleUrl})`;
   const cssPattern = `<style>[^<]*` + styleUrl;
   const regex = new RegExp(
-    `(?<=(` + htmlPattern + `|` + cssPattern + `)\\s*?)${base}(?!\/)`,
+    `(?<=(${htmlPattern}|${cssPattern})\\s*?)${base}${arlSkipPattern}`,
     'gm'
   );
 
@@ -56,7 +57,9 @@ export function replaceHTML({
       .split(path.sep)
       .join(path.posix.sep) || '.';
 
-  return html.replace(regex, `${relativePath}/`);
+  return html
+    .replace(regex, `${relativePath}/`)
+    .replace(new RegExp('\\s+arl:skip', 'gm'), '');
 }
 
 /**
